@@ -1,0 +1,88 @@
+syntax = "proto3";
+import 'import.proto';
+
+message TestRequest{
+  double test_double = 1;
+  float test_float = 2;
+  int32 test_int32 = 3;
+  int64 test_int64 = 4;
+  uint32 test_uint32 = 5;
+  uint64 test_uint64 = 6;
+  sint32 test_sint32 = 7;
+  sint64 test_sint64 = 8;
+  fixed32 test_fixed32 = 9;
+  fixed64 test_fixed64 = 10;
+  sfixed32 test_sfixed32 = 11;
+  sfixed64 test_sfixed64 = 12;
+  bool test_bool = 13;
+  string test_string = 14;
+  bytes test_bytes = 15;
+  enum TestEnum{
+    ENUMVAL1 = 0;
+    ENUMVAL2 = 1;
+    ENUMVAL3 = 2;
+    ENUMVAL4 = 3;
+  }
+  TestEnum test_enum = 16;
+  repeated string test_repeat_string = 17;
+}
+
+message TestResponse{
+  string response_string = 1;
+}
+
+message FileChunk{
+  bytes file_bytes = 1;
+}
+
+message NestedData{
+  message NestedElem{
+    string nested_string = 1;
+    repeated string nested_repeated_string = 2;
+  }
+  NestedElem nested_elem = 1;
+}
+
+message RefNested{
+  NestedData.NestedElem nested_elem = 1;
+}
+
+message OneOf{
+  oneof oneof_test{
+    string one_of_string = 1;
+    float one_of_float = 2;
+  }
+}
+
+message NotFilled{
+  string first = 4;
+  float second = 10;
+}
+
+message MapMsg{
+  map<string, float> firstMap = 1;
+}
+
+message importMsg{
+  import_proto.importedMessage imported_message = 1;
+}
+
+
+
+service TestService {
+  rpc Test(TestRequest) returns (TestResponse);
+  rpc TestStream(stream TestRequest) returns (stream TestResponse);
+  rpc Upload(stream FileChunk) returns(TestResponse);
+  rpc Download(TestRequest) returns(stream FileChunk);
+  rpc NestedTest(NestedData) returns (NestedData);
+  rpc RefNestedTest(RefNested) returns (RefNested);
+  rpc OneOfTest(OneOf) returns (OneOf);
+  rpc NotFilledTest(NotFilled) returns (NotFilled);
+  rpc MapTest(MapMsg) returns (MapMsg);
+  rpc ImportTest(importMsg) returns (importMsg);
+}
+
+service TestService2 {
+  rpc Test(TestRequest) returns (TestResponse) {};
+  rpc TestStream(stream TestRequest) returns (stream TestResponse) {};
+}
