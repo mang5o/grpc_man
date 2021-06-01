@@ -1,19 +1,11 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-  <h1>aaaaaaaaa</h1>
+  <LeftElement name="aa" proto='test.proto' timestamp='20200101'></LeftElement>
+    <div v-for='tl in testList' v-bind:key='tl'>
+      {{tl}}
+    </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-
-</script>
+<script src='./static/js/app.js'/>
 
 <style>
 #app {
