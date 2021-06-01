@@ -3,6 +3,15 @@
     <div v-for='tl in testList' v-bind:key='tl'>
       {{tl}}
     </div>
+    <draggable 
+      v-model="myArray" 
+      group="people" 
+      @end="leftMove" 
+      item-key="id">
+      <template #item="{element}">
+        <div>{{element.name}}</div>
+      </template>
+    </draggable>
 </template>
 
 <script src='./static/js/app.js'/>

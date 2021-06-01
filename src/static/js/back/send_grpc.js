@@ -2,7 +2,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 var sendGrpc = function(doubleVal){
-  let PROTO_PATH = __dirname + '/proto/test.proto';
+  let PROTO_PATH = __dirname + '/../src/components/test_proto/test.proto';
   let packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
     {keepCase: true,
