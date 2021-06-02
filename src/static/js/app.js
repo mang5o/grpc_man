@@ -1,9 +1,11 @@
 import draggable from 'vuedraggable'
 import LeftElement from '../../components/LeftElement.vue'
-
-
+import Layout from '../../components/Layout.vue'
 
 var data = {
+    config:{
+      sideWidth: 50
+    },
     testList: ["A","b","c","d"],
     myArray:[
       {name: "AA11"},
@@ -17,7 +19,8 @@ export default {
     name: 'App',
     components: {
       LeftElement,
-      draggable
+      draggable,
+      Layout
     },
     data: function() {
       return data
@@ -26,8 +29,11 @@ export default {
       leftMove: function(){
         //sortable changed
         console.log(data.myArray)
-      }
+      },
+      onResize: function(e){
+        console.log(e.pageX)
+    }
     }
   }
 
-  data.testList[2] = "AAAAAAAAAA"
+

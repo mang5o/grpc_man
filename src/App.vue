@@ -1,17 +1,6 @@
 <template>
-  <LeftElement name="aa" proto='test.proto' timestamp='20200101'></LeftElement>
-    <div v-for='tl in testList' v-bind:key='tl'>
-      {{tl}}
-    </div>
-    <draggable 
-      v-model="myArray" 
-      group="people" 
-      @end="leftMove" 
-      item-key="id">
-      <template #item="{element}">
-        <div>{{element.name}}</div>
-      </template>
-    </draggable>
+  <Layout>
+  </Layout>
 </template>
 
 <script src='./static/js/app.js'/>
