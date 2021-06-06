@@ -23,7 +23,7 @@
 
 <script>
 var layoutData = {
-    leftWidth : 50,
+    leftWidth : 100,
     nowDrag   : false
 }
 export default {

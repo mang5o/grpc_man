@@ -1,10 +1,15 @@
+const electron = window.require("electron")
+electron.ipcRenderer.send('get_configs', '')
 import draggable from 'vuedraggable'
 import LeftElement from '../../components/LeftElement.vue'
 import Layout from '../../components/Layout.vue'
 
 var data = {
     config:{
-      sideWidth: 50
+      
+    },
+    palette : {
+
     },
     testList: ["A","b","c","d"],
     myArray:[
@@ -14,6 +19,13 @@ var data = {
       {name: "AA114"},
     ]
 }
+
+electron.ipcRenderer.on('renderer_get_configs', (evt, payload) => {
+  console.log(payload)
+  data.config = payload.userData
+  data.palatte = payload.palette
+  console.log(data)
+})
 
 export default {
     name: 'App',
