@@ -3,17 +3,17 @@
        <table>
             <tbody>
                 <tr>
-                    <td class='leftTd' v-bind:style="{ width: leftWidth +'px' }" rowspan=2>
+                    <td class='leftTd' v-bind:style="{ width: leftWidth +'px', backgroundColor: left }" rowspan=2>
 
                     </td>
                     <td class='leftResize' @mousedown="onResize"  rowspan=2>
 
                     </td>
-                    <td class='rightTab'>
+                    <td class='rightTab' v-bind:style="{ backgroundColor: top }">
                     </td>
                 </tr>
                 <tr>
-                    <td class='contents'>
+                    <td class='contents' v-bind:style="{ backgroundColor: center }">
                     </td>
                 </tr>
             </tbody>
@@ -23,8 +23,21 @@
 
 <script>
 var layoutData = {
-    leftWidth : 100,
-    nowDrag   : false
+    leftWidth   : 150,
+    nowDrag     : false,
+
+    //Color
+    name   : " ",
+    left   : "#000000",
+    top    : "#000000",
+    center : "#000000",
+    text   : "#000000",
+    warn   : "#000000",
+    high   : "#000000",
+    back   : "#000000",
+    lalpha : 0,
+    talpha : 0,
+    
 }
 export default {
   name: 'Layout',
@@ -42,9 +55,22 @@ export default {
             if(this.nowDrag){
                 this.leftWidth = event.pageX
             }
+        },
+        setData: function(key, val){
+            this[key] = val
         }
+    },
+    created(){
+        const electron = window.require("electron")
+        electron.ipcRenderer.send('get_layout_color', '')
+        electron.ipcRenderer.on('layout_get_configs', (evt, payload) => {
+            for (var key in payload){
+                this.setData(key, payload[key])
+            }
+        })
     }
 }
+
 
 </script>
 
@@ -67,15 +93,6 @@ table{
 tr, td{
     padding:0;
     margin:0;
-}
-.leftTd{
-    background-color:#001011;
-}
-.rightTab{
-    background-color:#093A3E;
-}
-.contents{
-    background-color:#3AAFB9;
 }
 .leftResize{
     background-color:#FFFFFF;

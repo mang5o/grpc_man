@@ -21,10 +21,8 @@ var data = {
 }
 
 electron.ipcRenderer.on('renderer_get_configs', (evt, payload) => {
-  console.log(payload)
   data.config = payload.userData
   data.palatte = payload.palette
-  console.log(data)
 })
 
 export default {
