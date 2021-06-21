@@ -1,6 +1,7 @@
 // var sendGrpc = require('./send_grpc.js')
 // console.log("sendGRPC")
-// sendGrpc(1.9)
+// // sendGrpc(1.9)
+// sendGrpc("A")
 
 const { ipcMain } = require('electron')
 var configs = {}
@@ -15,4 +16,8 @@ ipcMain.on('get_layout_color', (evt, payload) => {
     let nowPalette = configs.nowColors.palette
     let nowReturnPalette = nowPalette.find(element => element["name"] == nowColorConf)
     evt.reply('layout_get_configs', nowReturnPalette)
+})
+ipcMain.on('get_user_data', (evt, payload) => {
+    let nowUserData = configs.userData.user
+    evt.reply('user_get', nowUserData)  
 })

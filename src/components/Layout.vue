@@ -10,10 +10,12 @@
 
                     </td>
                     <td class='rightTab' v-bind:style="{ backgroundColor: top }">
+                        <RightTab></RightTab>
                     </td>
                 </tr>
                 <tr>
                     <td class='contents' v-bind:style="{ backgroundColor: center }">
+                          <SettingPage></SettingPage>
                     </td>
                 </tr>
             </tbody>
@@ -22,6 +24,8 @@
 </template>
 
 <script>
+import SettingPage from './SettingPage.vue'
+import RightTab from './RightTab.vue'
 var layoutData = {
     leftWidth   : 150,
     nowDrag     : false,
@@ -41,6 +45,10 @@ var layoutData = {
 }
 export default {
   name: 'Layout',
+  components: {
+      RightTab,
+      SettingPage
+  },
   data: function() {
       return layoutData
   },
@@ -99,6 +107,9 @@ tr, td{
     width:4px;
     height:100%;
     cursor:w-resize;
+}
+.rightTab {
+    height: 2px;
 }
 
 </style>

@@ -1,6 +1,6 @@
 var fs = require('fs')
-
-if(!fs.existsSync('config/colorJson.json')){
+var jsonName = 'config/color.json'
+if(!fs.existsSync(jsonName)){
     let colorJson = {
         "palette":
             [
@@ -43,13 +43,13 @@ if(!fs.existsSync('config/colorJson.json')){
             ]
     }
     let colorStringify = JSON.stringify(colorJson)
-    fs.writeFileSync('config/colorJson.json',colorStringify)
-    console.log("File not exists : config/colorJson.json")
+    fs.writeFileSync(jsonName,colorStringify)
+    console.log("File not exists : " + jsonName)
     exports.json = colorJson
 }else{
-    let colorStringify = fs.readFileSync('config/colorJson.json')
+    let colorStringify = fs.readFileSync(jsonName)
     let colorJson = JSON.parse(colorStringify.toString())
-    console.log("File exists : config/colorJson.json")
+    console.log("File exists : " + jsonName)
     exports.json = colorJson
 }
 

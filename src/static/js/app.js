@@ -36,13 +36,9 @@ export default {
       return data
     },
     methods:{
-      leftMove: function(){
-        //sortable changed
-        console.log(data.myArray)
-      },
       onResize: function(e){
         console.log(e.pageX)
-    }
+      }
     }
   }
 
