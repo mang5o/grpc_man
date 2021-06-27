@@ -19,6 +19,7 @@
     "dns": "^0.2.2",
     "http2": "^3.3.7",
     "vue": "^3.0.0",
+    "vue3-tabs-chrome": "^0.2.1",
     "vuedraggable": "^4.0.1"
   },
   "devDependencies": {

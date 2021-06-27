@@ -1,4 +1,5 @@
 <template>
+    <ChromeBar></ChromeBar>
     <div class='outer'>
         <draggable 
             v-model="nowTab" 
@@ -14,6 +15,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import ChromeBar from './ChromeBar.vue'
 var tabData = {
     //Color
     name   : " ",
@@ -37,7 +39,8 @@ var tabData = {
 export default {
   name: 'RightTab',
   components: {
-      draggable
+      draggable,
+      ChromeBar
   },
   data: function() {
       return tabData
