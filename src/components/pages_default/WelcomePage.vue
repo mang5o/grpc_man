@@ -1,10 +1,11 @@
 <template>
-    <ChromeBar></ChromeBar>
+    <div class='welcomePage'>
+        {{textSources}}
+    </div>
 </template>
 
 <script>
-import ChromeBar from './ChromeBar.vue'
-var tabData = {
+var layoutData = {
     //Color
     name   : " ",
     left   : "#000000",
@@ -17,31 +18,30 @@ var tabData = {
     lalpha : 0,
     talpha : 0,
 
-    //TabData
-    nowTab : [
-        {id: 0, type: 0, name: "Setting"},
-        {id: 1, type: 1, name: "RPC"},
-        {id: 2, type: 1, name: "RPC2"},
-    ]
+    textSources: '# Loading readme.md'
 }
 export default {
-  name: 'RightTab',
+  name: 'WelcomePage',
   components: {
-      ChromeBar
   },
   data: function() {
-      return tabData
+      return layoutData
   },
   methods:{
       setData: function(key, val){
             this[key] = val
-      },
-      leftMove: function(){
-        //sortable changed
-        console.log(tabData.nowTab)
-      },
+        },
+        patchGet : function(){
+            var mdUrl = "https://raw.githubusercontent.com/mang5o--"
+            var xmlHttp = null;
+            xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", mdUrl, false );
+            xmlHttp.send( null );
+            this.textSources = xmlHttp.responseText
+        }
   },
   created(){
+    //   this.patchGet()
         const electron = window.require("electron")
         electron.ipcRenderer.send('get_layout_color', '')
         electron.ipcRenderer.on('layout_get_configs', (evt, payload) => {
@@ -53,20 +53,11 @@ export default {
 }
 </script>
 
-
 <style scoped>
-.outer{
-    position: inherit;
-    width: 100%;
-    height: min-content;
-    text-align: left;
+.welcomePage {
+  position: inherit;
+  height: 100%;
+  display: inline-block;
+  overflow-y: scroll;
 }
-.tabElem{
-    position: inherit;
-    width: 200px;
-    height: 24px;
-    background-color: red;
-    display: inline-block;
-}
-
 </style>

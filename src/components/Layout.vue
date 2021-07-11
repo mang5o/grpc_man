@@ -15,7 +15,21 @@
                 </tr>
                 <tr>
                     <td class='contents' v-bind:style="{ backgroundColor: center }">
-                          <SettingPage></SettingPage>
+                        <template v-if="session.tab != undefined">
+                            <!-- default session -->
+                            <template v-if="session.tab.session==0">
+                                <template v-if="session.tab.tab ==0">
+                                    <WelcomePage></WelcomePage>
+                                </template>
+                                <template v-if="session.tab.tab ==1">
+                                    <SettingPage></SettingPage>
+                                </template>
+                            </template>
+                            <!-- rpc session     -->
+                            <template v-else>
+
+                            </template>
+                        </template>
                     </td>
                 </tr>
             </tbody>
@@ -24,7 +38,8 @@
 </template>
 
 <script>
-import SettingPage from './SettingPage.vue'
+import SettingPage from './pages_default/SettingPage.vue'
+import WelcomePage from './pages_default/WelcomePage.vue'
 import RightTab from './RightTab.vue'
 var layoutData = {
     leftWidth   : 150,
@@ -41,13 +56,17 @@ var layoutData = {
     back   : "#000000",
     lalpha : 0,
     talpha : 0,
+
+    //Sessions
+    session : {}
     
 }
 export default {
   name: 'Layout',
   components: {
       RightTab,
-      SettingPage
+      SettingPage,
+      WelcomePage
   },
   data: function() {
       return layoutData
@@ -75,6 +94,10 @@ export default {
             for (var key in payload){
                 this.setData(key, payload[key])
             }
+        })
+        electron.ipcRenderer.send('get_layout_session', '')
+        electron.ipcRenderer.on('layout_get_session', (evt, payload) => {
+            this.setData("session", payload)
         })
     }
 }

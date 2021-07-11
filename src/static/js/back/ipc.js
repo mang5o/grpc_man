@@ -21,3 +21,7 @@ ipcMain.on('get_user_data', (evt, payload) => {
     let nowUserData = configs.userData.user
     evt.reply('user_get', nowUserData)  
 })
+ipcMain.on('get_layout_session', (evt, payload) => {
+    let nowSession = configs.nowSession
+    evt.reply('layout_get_session', nowSession)  
+})
