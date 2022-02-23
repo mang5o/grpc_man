@@ -3,25 +3,30 @@
 // // sendGrpc(1.9)
 // sendGrpc("A")
 
-const { ipcMain } = require('electron')
-var configs = {}
-module.exports = function(expConfigs){
-    configs = expConfigs
-}
-ipcMain.on('get_configs', (evt, payload) => {
-    evt.reply('renderer_get_configs', configs)
-})
-ipcMain.on('get_layout_color', (evt, payload) => {
-    let nowColorConf = configs.userData.user.nowColor
-    let nowPalette = configs.nowColors.palette
-    let nowReturnPalette = nowPalette.find(element => element["name"] == nowColorConf)
-    evt.reply('layout_get_configs', nowReturnPalette)
-})
-ipcMain.on('get_user_data', (evt, payload) => {
-    let nowUserData = configs.userData.user
-    evt.reply('user_get', nowUserData)  
-})
-ipcMain.on('get_layout_session', (evt, payload) => {
-    let nowSession = configs.nowSession
-    evt.reply('layout_get_session', nowSession)  
-})
+
+var importGrpc = require('./import_grpc.js')
+var fsFunc = require('./fs_func')
+const { ipcMain, dialog } = require('electron')
+ipcMain.on('load_main_proto_diagram', (evt, payload) => {
+    dialog.showOpenDialog(null, { 
+        title: "Select Main Proto File",
+        properties: ['openFile'],
+        filters: [
+            { name: '.Proto', extensions: ['proto']}
+        ]
+    }).then(filePaths=>{
+        if (filePaths.filePaths.length>0){
+            let returnGrpcInform = importGrpc(filePaths)
+            evt.reply('load_main_proto_diagram', 
+                {
+                    mainProto: filePaths,
+                    grpcInform: returnGrpcInform
+                }
+            )
+        }
+    })
+})  
+ipcMain.on('save_session', (evt, payload) => {
+    let saveSessionPayload = fsFunc.saveSession(payload)
+    evt.reply('save_session', saveSessionPayload)
+})  
