@@ -87,7 +87,7 @@
 
 
             </template>
-            <tr><td colspan="4"></td></tr>
+            <tr><td colspan="4" class="makeWidth"></td></tr>
 
 
         </table>
@@ -141,6 +141,7 @@ export default {
 .addingDiv{
     width: 100%;
     height: 100%;
+    text-align: center;
 }
 .addingTable {
   width: 100%;
@@ -148,6 +149,10 @@ export default {
   padding: 8px;
   table-layout: fixed;
   text-align: left;
+  max-width: 1280px;
+  display: table;
+  margin-left:auto;
+  margin-right:auto;
 }
 .upBtn{
     border-radius:2px;
@@ -243,9 +248,9 @@ export default {
 .oddTd{background-color: rgb(232, 242, 255);}
 .evenTd{background-color: rgb(242, 247, 252);}
 
-.upperTr{height: 46px;}
+.upperTr{height: 46px; width:100%}
 .mainTr{height:42px;}
 .categoryTr{height:32px;}
 .allElemTr{height:24px;}
-
+.makeWidth{width:100%;}
 </style>
