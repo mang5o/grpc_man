@@ -24,20 +24,17 @@
             <tr v-if="nowFlag==2" class="thirdTr">
                 <td class="previewDiv" colspan="3">
                     <p>Preview</p>
-                    <div v-for="(i, index) in allPaths" v-bind:key="index" class="nestedDiv">
+                    <div v-for="(i, index) in protos" v-bind:key="index" class="nestedDiv">
                         <div class="importDiv">IMPORT</div>
                         <p class="nestedP">{{i}}</p>
                     </div>
-                    <div v-for="(i, index) in nested" v-bind:key="index" class="nestedDiv">
-                        <div v-if="i[1].methods!==undefined" class="serviceDiv">SERVICE</div>
-                        <div v-else class="messageDiv">MESSAGE</div>
-                        <p class="nestedP">{{i[0]}}</p>
-                        <template v-if="i[1].methods!==undefined">
-                            <div v-for="(j,subIndex) in i[1].methods" v-bind:key="subIndex" class="smallNestedDiv">
-                                <div class="rpcDiv">RPC</div>
-                                <p class="subNestedP">{{j[0]}}</p>
-                            </div>
-                        </template>
+                    <div v-for="(i, index) in protoInform.msg" v-bind:key="index" class="nestedDiv">
+                        <div class="messageDiv">MESSAGE</div>
+                        <p class="nestedP">{{i.name}}</p>
+                    </div>
+                    <div v-for="(i, index) in protoInform.serv" v-bind:key="index" class="nestedDiv">
+                        <div class="serviceDiv">SERVICE</div>
+                        <p class="nestedP">{{i.name}}</p>
                     </div>
                 </td>
             </tr>
@@ -57,9 +54,9 @@
 var addingPageData = {
           nowFlag:0, // 0: not uploaded, 1 : not available proto, 2 : good proto
           protoPath: "test",
-          allPaths: [],
-          nested: [],
-          sessionName: "session name"
+          sessionName: "session name",
+          protos: [],
+          protoInform: {}
 }
 const electron = window.require("electron")
 export default {
@@ -68,97 +65,20 @@ export default {
       return addingPageData
   },
   methods:{
-    loadDialog: function(){
-            electron.ipcRenderer.send('load_main_proto_diagram', '')
-    },
-    setData: function(key, val){
-            this[key] = val
-    },
-    addNested: function(dict){
-        this['nested'] = []
-        for (let key in dict){
-            if (dict[key].methods !== undefined){
-                let tmpDict = dict[key].methods
-                let newMethods = []
-                for (let subkey in tmpDict){
-                    newMethods.push([subkey, tmpDict[subkey]])
-                }
-                dict[key].methods = newMethods
-            }
-            this['nested'].push([key, dict[key]])
-        }
-    },
+    loadDialog: function(){ electron.ipcRenderer.send('load_main_proto_diagram', '') },
+    setData: function(key, val){ this[key] = val },
     addSession: function(){
-        if (addingPageData.nowFlag!=2){
-            return
-        }
-        let nowAddSession = {
-            mainProto: addingPageData.protoPath,
-            protos: addingPageData.allPaths,
-            protoStruct: {
-                msg : [],
-                serv : []
-            },
-        }
-        for(let cnt=0; cnt<addingPageData.nested.length; cnt++){
-            let tmpElem = addingPageData.nested[cnt]
-            if (tmpElem[1].methods!==undefined){ // Service
-                let tmpPush = {
-                        name: tmpElem[0],
-                        type: 0,
-                        rpcs: []
-                }
-                for(let cntt = 0; cntt<tmpElem[1].methods.length; cntt++){
-                    tmpPush.rpcs.push(
-                        {
-                            name: tmpElem[1].methods[cntt][0],
-                            requestType: tmpElem[1].methods[cntt][1].requestType,
-                            responseType: tmpElem[1].methods[cntt][1].responseType
-                        }
-                    )
-                }
-                nowAddSession.protoStruct.serv.push(tmpPush)
-            }
-            else{ //massage
-                let tmpPush = {
-                        name: tmpElem[0],
-                        type: 1,
-                        structs: []
-                }
-                for(let keys in tmpElem[1].fields){
-                        if (tmpElem[1].fields[keys].map){
-                            tmpPush.structs.push(
-                                {
-                                    name: tmpElem[1].fields[keys].name,
-                                    type: "map<>" 
-                                    + tmpElem[1].fields[keys].keyType 
-                                    + "<>" + tmpElem[1].fields[keys].type
-                                }
-                            )
-                        }
-                        else{
-                            tmpPush.structs.push(
-                                {
-                                    name: tmpElem[1].fields[keys].name,
-                                    type: tmpElem[1].fields[keys].type
-                                }
-                            )
-                        }
-                    }
-                // structs Type 넣기
-                nowAddSession.protoStruct.msg.push(tmpPush)
-            }
-        }
-        electron.ipcRenderer.send('save_session', nowAddSession)
+        if (addingPageData.nowFlag!=2){ return }
+        electron.ipcRenderer.send('save_session', addingPageData)
     }
   },
   created(){
         electron.ipcRenderer.on('load_main_proto_diagram', (evt, payload) => {
             console.log(payload)
             this.setData("nowFlag",2)
-            this.setData("protoPath", payload.mainProto.filePaths[0])
-            this.setData("allPaths", payload.grpcInform.files)
-            this.addNested(payload.grpcInform.nested)
+            this.setData("protoPath", payload.mainProto)
+            this.setData("protos", payload.protos)
+            this.setData("protoInform", payload.protoStruct)
             console.log(addingPageData)
         }) 
         electron.ipcRenderer.on('save_session', (evt, payload) => {

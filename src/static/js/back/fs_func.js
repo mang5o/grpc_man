@@ -28,15 +28,11 @@ const fsFunc = {
         let nowSessionObject = JSON.parse(nowSessionConfig.toString())
         nowSessionObject.nowKey += 1
         addElem["nowKey"] = nowSessionObject.nowKey
-        console.log(addElem)
         nowSessionObject.nowSessions.push(addElem)
         fs.writeFileSync(this.dirPath + this.sessionName,
-            JSON.stringify(nowSessionObject))
+            JSON.stringify(nowSessionObject,null,4))
         return nowSessionObject
     }
     
 }
-
-
-
 module.exports = fsFunc

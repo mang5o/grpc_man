@@ -2,6 +2,7 @@
 node_modules
 /dist
 */session_data/*
+session_data/session.json
 
 
 # local env files

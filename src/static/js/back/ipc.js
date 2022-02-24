@@ -4,7 +4,8 @@
 // sendGrpc("A")
 
 
-var importGrpc = require('./import_grpc.js')
+var importGrpc = require('./grpc/import_grpc')
+var refineProto = require("./grpc/refineProto")
 var fsFunc = require('./fs_func')
 const { ipcMain, dialog } = require('electron')
 ipcMain.on('load_main_proto_diagram', (evt, payload) => {
@@ -17,16 +18,13 @@ ipcMain.on('load_main_proto_diagram', (evt, payload) => {
     }).then(filePaths=>{
         if (filePaths.filePaths.length>0){
             let returnGrpcInform = importGrpc(filePaths)
-            evt.reply('load_main_proto_diagram', 
-                {
-                    mainProto: filePaths,
-                    grpcInform: returnGrpcInform
-                }
-            )
+            evt.reply('load_main_proto_diagram', refineProto(filePaths, returnGrpcInform))
         }
     })
 })  
 ipcMain.on('save_session', (evt, payload) => {
+    payload["activeRpcs"] = []
     let saveSessionPayload = fsFunc.saveSession(payload)
     evt.reply('save_session', saveSessionPayload)
 })  
+
