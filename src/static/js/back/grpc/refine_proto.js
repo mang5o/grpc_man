@@ -37,9 +37,9 @@ var refineProto = function(filePaths, grpcInform){
                         tmpPush.structs.push(
                             {
                                 name: tmpElem.fields[keys].name,
-                                type: "map<>" 
+                                type: "map<" 
                                 + tmpElem.fields[keys].keyType 
-                                + "<>" + tmpElem.fields[keys].type
+                                + "," + tmpElem.fields[keys].type + ">"
                             }
                         )
                     }

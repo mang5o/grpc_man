@@ -1,51 +1,95 @@
 <template>
     <div class="addingDiv">
         <table class="addingTable">
-            <tr class="topTr">
-                <td class="topLeft">
-                    <label for="protoPath">Proto</label>
+            <colgroup>
+                <col style="width:25%">
+                <col style="width:25%">
+                <col style="width:25%">
+                <col style="width:25%">
+            </colgroup>
+
+            <tr class="upperTr">
+                <td class="rightTd">
+                    <p align="left" class="topLabel">Session name</p>
                 </td>
-                <td class="topCenter">
-                    <input class="protoPath" type="text" id="protoPath" name="protoPath" v-model="protoPath" readonly>
+                <td colspan="2">
+                    <input type="text" class="longInput" id="sessionNameInput" name="sessionNameInput" v-model="sessionName">
                 </td>
-                <td class="topRight">
-                    <button class="mainProtoBtn"
-                            type="button" v-on:click="loadDialog">
+                <td class="rightTd">
+                    <button class="upBtn" type="button">
+                            Reset
+                    </button>
+                    <button class="upBtn" type="button" v-on:click="addSession">
+                        Save
+                    </button>
+                </td>
+            </tr>
+
+            <tr class="upperTr">
+                <td class="rightTd">
+                    <p align="left" class="topLabel">Proto</p>
+                </td>
+                <td colspan="2">
+                    <input type="text" class="longInput" id="protoPath" name="protoPath" v-model="protoPath" readonly>
+                </td>
+                <td class="rightTd">
+                    <button class="upBtn" type="button" v-on:click="loadDialog">
                         Load proto
                     </button>
                 </td>
             </tr>
-            <tr v-if="nowFlag==2" class="secondTr">
-                <td class="sessionName" colspan="3">
-                    <p class="sessionP" align="left">Session name</p>
-                    <input class="sessionNameInput" type="text" id="sessionNameInput" name="sessionNameInput" v-model="sessionName">
-                </td>
-            </tr>
-            <tr v-if="nowFlag==2" class="thirdTr">
-                <td class="previewDiv" colspan="3">
-                    <p>Preview</p>
-                    <div v-for="(i, index) in protos" v-bind:key="index" class="nestedDiv">
-                        <div class="importDiv">IMPORT</div>
-                        <p class="nestedP">{{i}}</p>
-                    </div>
-                    <div v-for="(i, index) in protoInform.msg" v-bind:key="index" class="nestedDiv">
-                        <div class="messageDiv">MESSAGE</div>
-                        <p class="nestedP">{{i.name}}</p>
-                    </div>
-                    <div v-for="(i, index) in protoInform.serv" v-bind:key="index" class="nestedDiv">
-                        <div class="serviceDiv">SERVICE</div>
-                        <p class="nestedP">{{i.name}}</p>
-                    </div>
-                </td>
-            </tr>
-            <tr v-if="nowFlag==2">
-                <td colspan="3" class="saveTr"> 
-                    <button class="saveProtoBtn"
-                            type="button" v-on:click="addSession">
-                        Save Session
-                    </button>
-                </td>
-            </tr>
+            
+            
+            <template v-if="nowFlag==2">
+                <tr class="blanks"><td></td><td></td><td></td><td></td></tr>
+                <tr class="mainTr"> <td colspan="4" class="centerTd"><p class="centerLabel">Proto files</p></td> </tr>
+                <tr v-for="(i, index) in protos" v-bind:key="index"  class="allElemTr">
+                    <td v-if="index%2==1" colspan="4" class="oddTd"><div class="allElemDiv"><p class="allElements">{{i}}</p></div></td>
+                    <td v-else colspan="4" class="evenTd"><div class="allElemDiv"><p class="allElements">{{i}}</p></div></td>
+                </tr>
+                <tr class="blanks"><td></td><td></td><td></td><td></td></tr>
+                <tr class="mainTr"> <td colspan="4" class="centerTd"><p class="centerLabel">Messages</p></td> </tr>
+                <tr class="allElemTr">
+                    <td colspan="3" class="categoryTd"><p class="categoryLabel">name</p></td>
+                    <td class="categoryTd"><p class="categoryLabel">type</p></td>
+                </tr>
+                <template v-for="(i, index) in protoInform.msg" v-bind:key="index">
+                    <tr class="categoryTr"> <td colspan="4" class="allBigTd"><div class="allElemDiv"><p class="allBigElements">{{i.name}}</p></div></td> </tr>
+                    <tr class="allElemTr" v-for="(j, subIndex) in i.structs" v-bind:key="subIndex">
+                        <td v-if="subIndex%2==1" class="oddTd" ></td>
+                        <td v-if="subIndex%2==1" class="oddTd" colspan="2"><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
+                        <td v-if="subIndex%2==1" class="oddTd"><div class="allElemDiv"><p class="allElements">{{j.type}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ></td>
+                        <td v-if="subIndex%2==0" class="evenTd" colspan="2"><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd"><div class="allElemDiv"><p class="allElements">{{j.type}}</p></div></td>
+                    </tr>
+                </template>
+                <tr class="blanks"><td></td><td></td><td></td><td></td></tr>
+                <tr class="mainTr"> <td colspan="4" class="centerTd"><p class="centerLabel">Services</p></td> </tr>
+                <tr class="allElemTr">
+                    <td colspan="2" class="categoryTd"><p class="categoryLabel">name</p></td>
+                    <td class="categoryTd"><p class="categoryLabel">Request</p></td>
+                    <td class="categoryTd"><p class="categoryLabel">Response</p></td>
+                </tr>
+                <template v-for="(i, index) in protoInform.serv" v-bind:key="index">
+                    <tr class="categoryTr"> <td colspan="4" class="allBigTd"><div class="allElemDiv"><p class="allBigElements">{{i.name}}</p></div></td> </tr>
+                    <tr class="allElemTr" v-for="(j, subIndex) in i.rpcs" v-bind:key="subIndex">
+                        <td v-if="subIndex%2==1" class="oddTd" ></td>
+                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
+                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv"><p class="allElements">{{j.requestType}}</p></div></td>
+                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv"><p class="allElements">{{j.responseType}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv"><p class="allElements">{{j.requestType}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv"><p class="allElements">{{j.responseType}}</p></div></td>
+                    </tr>
+                </template>
+
+
+            </template>
+            <tr><td colspan="4"></td></tr>
+
+
         </table>
     </div>
 </template>
@@ -90,6 +134,10 @@ export default {
 </script>
 
 <style scoped>
+.blanks{
+    background-color: rgba(0,0,0,0);
+    height: 12px;
+}
 .addingDiv{
     width: 100%;
     height: 100%;
@@ -98,99 +146,106 @@ export default {
   width: 100%;
   height: 100%;
   padding: 8px;
+  table-layout: fixed;
+  text-align: left;
 }
-.topTr{
-    width: 100%;
-    height: 32px;
-}
-.secondTr{
-    height: 32px;
-}
-.thirdTr{
-    width: 100%;
-    height: 64px;
-    overflow-y: auto;
-}
-.topLeft{
-    width: 64px;
-}
-.topCenter{
-    position: inherit;
-}
-.topRight{
-    width: 100px;
-}
-.protoPath{
-    width: 100%;
-}
-.sessionName{
-    margin: 8px;
-    height: 32px;
-}
-.sessionNameInput{
-    position: inherit;
-}
-.sessionP{
-    padding: 0;
-    margin: 0;
-}
-.nestedDiv{
-    text-align:left;
-}
-.serviceDiv{
+.upBtn{
+    border-radius:2px;
+    border: 0px solid;
+    background-color: rgb(71, 143, 255);
+    color: white;
+    padding: 12px;
+    transition: 0.2s;
     display: inline-block;
-    background-color: #000000;
-    margin: 4px;
-    padding: 4px;
-    width: 96px;
-    text-align: center;
+    margin: 2px;
+    font-weight: 100;
+    font-size: 12px;
+    font-family: Avenir;
 }
-.messageDiv{
-    display: inline-block;
-    background-color: #000000;
-    margin: 4px;
-    padding: 4px;
-    width: 96px;
-    text-align: center;
+.upBtn:hover{
+    background-color: rgb(131, 178, 252);
 }
-.importDiv{
-    display: inline-block;
-    background-color: #000000;
-    margin: 4px;
-    padding: 4px;
-    width: 96px;
-    text-align: center;
-    vertical-align: top;
+.upBtn:focus{
+    outline:none;
 }
-.rpcDiv{
-    display: inline-block;
-    background-color: #000000;
-    margin: 2px 8px 2px 28px;
-    padding: 2px;
-    width: 96px;
-    text-align: center;
-    vertical-align: top;
-}
-.nestedP{
-    display: inline-block;
-    padding: 8px;
-    margin: 0
-}
-.subNestedP{
-    display: inline-block;
-    padding: 0;
-    margin: 0
-}
-.previewDiv{
-    overflow-x:hidden;
-    overflow-y:auto;
-}
-.saveProtoBtn{
-    display: inline-block;
-}
-.saveTr{
-    height: 32px;
+.rightTd{
     text-align: right;
 }
+.centerTd{
+    text-align: center;
+    background-color: rgb(71, 143, 255)
+}
+
+.longInput{
+    border-radius: 16px;
+    border: 1px solid rgb(197, 218, 250);
+    font-weight: 100;
+    font-size: 12px;
+    font-family: Avenir;
+    width: 94%;
+    padding: 10px;
+    margin: 2px;
+}
+.longInput:focus{
+    outline:none;
+}
+.topLabel{
+    font-weight: 100;
+    font-size: 16px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 0px 16px 0px 2px;
+}
+.centerLabel{
+    font-weight: 300;
+    font-size: 20px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 6px 0px 6px 0px;
+    color: white;
+}
+.categoryTd{
+    background-color: rgb(197, 218, 250);
+    text-align: center;
+}
+.categoryLabel{
+    font-weight: 100;
+    font-size: 14px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 2px 0px 2px 0px;
+    color: black;
+}
+.allBigElements{
+    font-weight: 300;
+    font-size: 18px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 4px 0px 4px 24px;
+    color: white;
+}
+.allElements{
+    font-weight: 100;
+    font-size: 14px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 2px 0px 2px 0px;
+    color: black;
+}
+.allElemDiv{
+    word-break:break-all;
+    word-wrap:break-word;
+    margin: 0px 8px;
+}
+.allBigTd{
+    background-color: rgb(133, 193, 255);
+}
+.oddTd{background-color: rgb(232, 242, 255);}
+.evenTd{background-color: rgb(242, 247, 252);}
+
+.upperTr{height: 46px;}
+.mainTr{height:42px;}
+.categoryTr{height:32px;}
+.allElemTr{height:24px;}
 
 </style>

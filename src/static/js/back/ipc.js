@@ -5,7 +5,7 @@
 
 
 var importGrpc = require('./grpc/import_grpc')
-var refineProto = require("./grpc/refineProto")
+var refineProto = require("./grpc/refine_proto")
 var fsFunc = require('./fs_func')
 const { ipcMain, dialog } = require('electron')
 ipcMain.on('load_main_proto_diagram', (evt, payload) => {
@@ -18,7 +18,7 @@ ipcMain.on('load_main_proto_diagram', (evt, payload) => {
     }).then(filePaths=>{
         if (filePaths.filePaths.length>0){
             let returnGrpcInform = importGrpc(filePaths)
-            evt.reply('load_main_proto_diagram', refineProto(filePaths, returnGrpcInform))
+            evt.reply('load_main_proto_diagram', refineProto(filePaths.filePaths, returnGrpcInform))
         }
     })
 })  
