@@ -1,10 +1,10 @@
-import AddingPage from '../../components/AddingPage.vue'
+import LayoutTable from '../../components/Layout.vue'
 
 
 export default {
     name: 'App',
     components: {
-      AddingPage
+      LayoutTable
     },
     data: function() {
       return {

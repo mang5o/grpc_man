@@ -1,6 +1,6 @@
 <template>
-  <AddingPage>
-  </AddingPage>
+  <LayoutTable>
+  </LayoutTable>
 </template>
 
 <script src='./static/js/app.js'/>

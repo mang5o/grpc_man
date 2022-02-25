@@ -27,4 +27,7 @@ ipcMain.on('save_session', (evt, payload) => {
     let saveSessionPayload = fsFunc.saveSession(payload)
     evt.reply('save_session', saveSessionPayload)
 })  
-
+ipcMain.on('reload_session', (evt, payload) => {
+    let reloadSessionPayload = fsFunc.loadSession()
+    evt.reply('reload_session', reloadSessionPayload)
+})  
