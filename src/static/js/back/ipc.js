@@ -23,7 +23,6 @@ ipcMain.on('load_main_proto_diagram', (evt, payload) => {
     })
 })  
 ipcMain.on('save_session', (evt, payload) => {
-    payload["activeRpcs"] = []
     let saveSessionPayload = fsFunc.saveSession(payload)
     evt.reply('save_session', saveSessionPayload)
 })  

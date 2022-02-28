@@ -16,7 +16,7 @@
                     <input type="text" class="longInput" id="sessionNameInput" name="sessionNameInput" v-model="sessionName">
                 </td>
                 <td class="rightTd">
-                    <button class="upBtn" type="button">
+                    <button class="upBtn" type="button" v-on:click="resetSession">
                             Reset
                     </button>
                     <button class="upBtn" type="button" v-on:click="addSession">
@@ -96,11 +96,11 @@
 
 <script>
 var addingPageData = {
-          nowFlag:0, // 0: not uploaded, 1 : not available proto, 2 : good proto
-          protoPath: "test",
-          sessionName: "session name",
-          protos: [],
-          protoInform: {}
+    nowFlag:0, // 0: not uploaded, 1 : not available proto, 2 : good proto
+    protoPath: "",
+    sessionName: "",
+    protos: [],
+    protoInform: {}
 }
 const electron = window.require("electron")
 export default {
@@ -114,6 +114,18 @@ export default {
     addSession: function(){
         if (addingPageData.nowFlag!=2){ return }
         electron.ipcRenderer.send('save_session', addingPageData)
+    },
+    resetSession: function(){
+        let defaultData = {
+          nowFlag: 0,
+          protoPath: "",
+          sessionName: "",
+          protos: [],
+          protoInform: {}
+        }
+        for(let keys in defaultData){
+            this.setData(keys,defaultData.keys)
+        }
     }
   },
   created(){
@@ -123,6 +135,8 @@ export default {
             this.setData("protoPath", payload.mainProto)
             this.setData("protos", payload.protos)
             this.setData("protoInform", payload.protoStruct)
+            let nowMainProto = payload.mainProto.split("/").pop().split("\\").pop()
+            this.setData("sessionName",nowMainProto)
             console.log(addingPageData)
         }) 
         electron.ipcRenderer.on('save_session', (evt, payload) => {

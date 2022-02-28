@@ -1,10 +1,19 @@
 <template>
     <div class="leftSessionTd">
             <div v-for="(session, index) in nowSessions" v-bind:key="index" class="sessionElem">
-                <div>
-                    <div class="expandElem"></div>
-                    <p class="nameElem">{{session.sessionName}}</p>
-                </div>
+                <table class="leftTable">
+                    <tr>
+                        <td class="btnTd">
+                            <div class="expandElem"></div>
+                        </td>
+                        <td>
+                            <p class="nameElem">{{session.sessionName}}</p>
+                        </td>
+                        <td class="btnTd">
+                            <div class="enterElem"></div>
+                        </td>
+                    </tr>
+                </table>
                 <p>{{session.protos}}</p>
             </div>
     </div>
@@ -60,7 +69,23 @@ export default {
     height: 16px;
     background-color: red;
 }
+.enterElem{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: red;
+}
+.btnTd{
+    width: 18px;
+    text-align: center;
+}
 .nameElem{
     display: inline-block;
+    margin: 0 4px 6px 4px;
+    font-weight: 400;
+    font-size: 16px;
+}
+.leftTable{
+    width: 100%
 }
 </style>
