@@ -3,6 +3,7 @@ node_modules
 /dist
 */session_data/*
 session_data/session.json
+*/protoConfig.json
 
 
 # local env files

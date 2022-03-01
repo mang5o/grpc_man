@@ -43,8 +43,6 @@ const fsFunc = {
             JSON.stringify(this.defaultProtoConfig))
 
         nowSessionObject.nowSessions.push(addElem)
-        fs.writeFileSync(this.dirPath + this.sessionName,
-            JSON.stringify(nowSessionObject,null,4))
 
         nowProtoPathList = addElem["protos"]
         for(let np = 0; np<nowProtoPathList.length; np++){
@@ -57,6 +55,13 @@ const fsFunc = {
             }
             
         }
+        let nowFinalIdx = nowSessionObject.nowSessions.length-1
+        nowSessionObject.nowSessions[nowFinalIdx].protoPath = nowSessionObject.nowSessions[nowFinalIdx].protoPath.split("/").pop().split("\\").pop()
+        for(let idxCnt = 0; idxCnt<nowSessionObject.nowSessions[nowFinalIdx].protos.length; idxCnt++){
+            nowSessionObject.nowSessions[nowFinalIdx].protos[idxCnt] = nowSessionObject.nowSessions[nowFinalIdx].protos[idxCnt].split("/").pop().split("\\").pop()
+        }
+        fs.writeFileSync(this.dirPath + this.sessionName,
+            JSON.stringify(nowSessionObject,null,4))
         
         return nowSessionObject
     }

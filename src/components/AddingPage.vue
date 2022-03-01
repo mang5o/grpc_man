@@ -141,6 +141,9 @@ export default {
         }) 
         electron.ipcRenderer.on('save_session', (evt, payload) => {
             console.log(payload)
+            this.$parent.overallDivOn("Session saved", 
+            "'"+this["sessionName"]+"' has been successfully saved and can be used on the left elememts.",0)
+            this.resetSession()
         }) 
     }
 }

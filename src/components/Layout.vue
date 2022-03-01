@@ -1,9 +1,11 @@
 <template>
+    <OverallMsg ref="overallMsgRef">
+    </OverallMsg>
     <table class="layoutTable">
         <tr>
             <td class="leftTd">
               <div class="tdDiv">
-                <LeftSession>
+                <LeftSession ref="leftSessionRef">
                 </LeftSession>
               </div>
             </td>
@@ -21,6 +23,7 @@
 <script>
 import AddingPage from './AddingPage.vue'
 import LeftSession from './LeftSession.vue'
+import OverallMsg from './Layout/OverallMsg.vue'
 var layoutData = {
 
 }
@@ -28,12 +31,21 @@ export default {
     name: 'LayoutTable',
     components: {
       AddingPage,
-      LeftSession
+      LeftSession,
+      OverallMsg
     },
     data: function() {
       return layoutData
     },
     methods:{
+      overallDivOn: function(mainMsg, msgToOverall, toFlag){
+        this.$refs.overallMsgRef.setMainMsg(mainMsg)
+        this.$refs.overallMsgRef.setMsg(msgToOverall)
+        this.$refs.overallMsgRef.setFlag(toFlag)
+        this.$refs.overallMsgRef.makeBtn()
+        this.$refs.overallMsgRef.makeDiv()
+        this.$refs.leftSessionRef.reloadSession()
+      }
   
     }
   }

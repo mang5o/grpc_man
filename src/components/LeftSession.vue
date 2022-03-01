@@ -4,15 +4,19 @@
                 <table class="leftTable">
                     <tr>
                         <td class="btnTd">
-                            <div class="expandElem"></div>
+                            <div class="expandElem">
+                                <img class="expandImg" v-on:click="toggleStage(index,0)"
+                                 v-if="session.toggleAll" src="./LeftSession/LeftImgs/toggleOff.png">
+                                <img class="expandImg" v-on:click="toggleStage(index,0)"
+                                 v-else src="./LeftSession/LeftImgs/toggleOn.png">
+                            </div>
                         </td>
                         <td>
                             <p class="nameElem">{{session.sessionName}}</p>
                         </td>
-                        <td class="btnTd">
-                            <div class="enterElem"></div>
-                        </td>
                     </tr>
+
+
                 </table>
                 <p>{{session.protos}}</p>
             </div>
@@ -22,11 +26,9 @@
 <script>
 var sessionData = {
     nowKey:-1,
-    nowSessions : [
-        {sessionName:"ABC"},
-        {sessionName:"ABCD"},
-        {sessionName:"ABCE"}
-    ]
+    nowSessions : [],
+    nowToggleDel: false,
+    nowToggleMov: false,
 }
 const electron = window.require("electron")
 export default {
@@ -40,12 +42,27 @@ export default {
                 this[key] = sessionDataParam[key]
             }
         },
+        reloadSession: function(){
+            electron.ipcRenderer.on('reload_session', (evt, payload) => { 
+                this.setData(payload)
+                for(let sess = 0; sess<this.nowSessions.length; sess++){
+                    let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ","toggleProcesses"]
+                    for(let sessCnt = 0; sessCnt<stageKey.length; sessCnt++){
+                        this.nowSessions[sess][stageKey[sessCnt]] = false
+                    }
+                }
+            }) 
+            console.log("reload_session : ")
+            console.log(sessionData)
+            electron.ipcRenderer.send('reload_session')
+        },
+        toggleStage: function(sessionIdx, stagePosition){
+            let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ","toggleProcesses"]
+            this.nowSessions[sessionIdx][stageKey[stagePosition]] = !(this.nowSessions[sessionIdx][stageKey[stagePosition]])
+        }
     },
     created(){
-        electron.ipcRenderer.on('reload_session', (evt, payload) => { this.setData(payload) }) 
-        console.log("reload_session : ")
-        console.log(sessionData)
-        electron.ipcRenderer.send('reload_session')
+        this.reloadSession()
     }
   }
 </script>
@@ -65,9 +82,10 @@ export default {
 }
 .expandElem{
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-color: red;
+    width: 24px;
+    height: 24px;
+    margin: 0px;
+    padding: 0px;
 }
 .enterElem{
     display: inline-block;
@@ -86,6 +104,12 @@ export default {
     font-size: 16px;
 }
 .leftTable{
-    width: 100%
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.expandImg{
+    padding:0;
+    margin: 0;
 }
 </style>
