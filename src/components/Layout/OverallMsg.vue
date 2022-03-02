@@ -76,6 +76,8 @@ export default {
     display: flex;
     align-items: center;
     text-align: center;
+
+    z-index:2;
 }
 .overallTableDiv{
     display: inline-block;
@@ -90,7 +92,13 @@ export default {
     font-weight: 100;
     font-size: 20px;
     font-family: Avenir;
-    margin: 8px 0;
+    margin: 8px 0 16px 0;
+
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .overallMainMsg{
     width: 100%;
@@ -98,6 +106,12 @@ export default {
     font-size: 32px;
     font-family: Avenir;
     margin: 8px 0;
+
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .overallBtn{
     border-radius:2px;
@@ -126,5 +140,10 @@ export default {
 }
 .topImg{
     margin: 12px 0 0 0;
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 </style>

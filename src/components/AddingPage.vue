@@ -112,7 +112,16 @@ export default {
     loadDialog: function(){ electron.ipcRenderer.send('load_main_proto_diagram', '') },
     setData: function(key, val){ this[key] = val },
     addSession: function(){
-        if (addingPageData.nowFlag!=2){ return }
+        if (addingPageData.nowFlag!=2){
+             this.$parent.overallDivOn("Not saved", 
+            "Please add a proto file",1)
+            return
+        }
+        if (addingPageData.protoInform.serv.length==0){//If it has not Serv list
+            this.$parent.overallDivOn("Not saved", 
+            "Please add a proto file with services",1)
+            return
+        }
         electron.ipcRenderer.send('save_session', addingPageData)
     },
     resetSession: function(){

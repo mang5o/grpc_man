@@ -8,123 +8,177 @@
         <tr>
             <div class="tdDiv">
                 <div v-for="(session, index) in nowSessions" v-bind:key="index" class="sessionElem">
-                    <table class="leftTable">
-                        <tr>
-                            <td class="btnTd">
-                                <div class="expandElem">
-                                    <img class="expandImg" v-on:click="toggleStage(index,0)"
-                                    v-if="session.toggleAll" src="./LeftSession/LeftImgs/toggleOff.png">
-                                    <img class="expandImg" v-on:click="toggleStage(index,0)"
-                                    v-else src="./LeftSession/LeftImgs/toggleOn.png">
-                                </div>
-                            </td>
-                            <td>
-                                <p class="nameElem">{{session.sessionName}}</p>
-                            </td>
-                        </tr>
-                    </table>
-                    <table class="leftToggleTable" v-if="session.toggleAll">
-                        <tr>
-                            <td class="btnTd">
-                                <div class="expandElem">
-                                    <img class="expandImg" v-on:click="toggleStage(index,1)"
-                                    v-if="session.toggleProto" src="./LeftSession/LeftImgs/toggleOff.png">
-                                    <img class="expandImg" v-on:click="toggleStage(index,1)"
-                                    v-else src="./LeftSession/LeftImgs/toggleOn.png">
-                                </div>
-                            </td>
-                            <td>
-                                <p class="nameElem">Proto files</p>
-                            </td>
-                        </tr>
-                    </table>
-                    <template v-if="session.toggleProto">
-                        <table class="leftElemTable" v-for="(elem, subIndex) in session.protos" v-bind:key="subIndex">
+                    <template v-if="session.toggleAll">
+                        <table class="leftTable" v-on:click="toggleStage(index,0)">
                             <tr>
                                 <td class="btnTd">
+                                    <div class="expandElem">
+                                        <img class="expandImg" src="./LeftSession/LeftImgs/toggleOff.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="nameElem">{{session.sessionName}}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </template>
+                    <template v-else>
+                        <table class="leftTable" v-on:click="toggleStage(index,0)">
+                            <tr>
+                                <td class="btnTd">
+                                    <div class="expandElem">
+                                        <img class="expandImg" src="./LeftSession/LeftImgs/toggleOn.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="nameElem">{{session.sessionName}}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </template>
+
+                    <template v-if="session.toggleAll">
+                        <template v-if="session.toggleProto">
+                            <table class="leftTable" v-on:click="toggleStage(index,1)">
+                                <tr>
+                                    <td class="btnTd2">
+                                        <div class="expandElem">
+                                            <img class="expandImg" src="./LeftSession/LeftImgs/toggleOff.png">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="nameElem2">Proto files</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </template>
+                        <template v-else>
+                            <table class="leftTable" v-on:click="toggleStage(index,1)">
+                                <tr>
+                                    <td class="btnTd2">
+                                        <div class="expandElem">
+                                            <img class="expandImg" src="./LeftSession/LeftImgs/toggleOn.png">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="nameElem2">Proto files</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </template>
+                    </template>
+
+                    <template v-if="session.toggleProto && session.toggleAll">
+                        <table class="leftTable" v-for="(elem, subIndex) in session.protos" v-bind:key="subIndex">
+                            <tr>
+                                <td class="btnTd3">
                                     <div class="expandElem">
                                         <img class="expandImg" src="./LeftSession/LeftImgs/elemProto.png">
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="nameElem">{{elem}}</p>
+                                    <p class="nameElem3">{{elem}}</p>
                                 </td>
                             </tr>
                         </table>
                     </template>
-                    <table class="leftToggleTable" v-if="session.toggleAll">
-                        <tr>
-                            <td class="btnTd">
-                                <div class="expandElem">
-                                    <img class="expandImg" v-on:click="toggleStage(index,2)"
-                                    v-if="session.toggleMsg" src="./LeftSession/LeftImgs/toggleOff.png">
-                                    <img class="expandImg" v-on:click="toggleStage(index,2)"
-                                    v-else src="./LeftSession/LeftImgs/toggleOn.png">
-                                </div>
-                            </td>
-                            <td>
-                                <p class="nameElem">Messages</p>
-                            </td>
-                        </tr>
-                    </table>
-                    <template v-if="session.toggleMsg">
-                        <table class="leftElemTable" v-for="(elem, subIndex) in session.protoInform.msg" v-bind:key="subIndex">
+
+                    <template v-if="session.toggleAll">
+                        <template v-if="session.toggleMsg">
+                            <table class="leftTable" v-on:click="toggleStage(index,2)">
                             <tr>
-                                <td class="btnTd">
+                                <td class="btnTd2">
+                                    <div class="expandElem">
+                                        <img class="expandImg" src="./LeftSession/LeftImgs/toggleOff.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="nameElem2">Messages</p>
+                                </td>
+                            </tr>
+                        </table>
+                        </template>
+                        <template v-else>
+                            <table class="leftTable" v-on:click="toggleStage(index,2)">
+                                <tr>
+                                    <td class="btnTd2">
+                                        <div class="expandElem">
+                                            <img class="expandImg" src="./LeftSession/LeftImgs/toggleOn.png">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="nameElem2">Messages</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </template>
+                    </template>
+
+
+                    <template v-if="session.toggleMsg && session.toggleAll">
+                        <table class="leftTable" v-for="(elem, subIndex) in session.protoInform.msg" v-bind:key="subIndex">
+                            <tr>
+                                <td class="btnTd3">
                                     <div class="expandElem">
                                         <img class="expandImg" src="./LeftSession/LeftImgs/elemMsg.png">
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="nameElem">{{elem.name}}</p>
+                                    <p class="nameElem3">{{elem.name}}</p>
                                 </td>
                             </tr>
                         </table>
                     </template>
-                    <table class="leftToggleTable" v-if="session.toggleAll">
-                        <tr>
-                            <td class="btnTd">
-                                <div class="expandElem">
-                                    <img class="expandImg" v-on:click="toggleStage(index,3)"
-                                    v-if="session.toggleServ" src="./LeftSession/LeftImgs/toggleOff.png">
-                                    <img class="expandImg" v-on:click="toggleStage(index,3)"
-                                    v-else src="./LeftSession/LeftImgs/toggleOn.png">
-                                </div>
-                            </td>
-                            <td>
-                                <p class="nameElem">Services</p>
-                            </td>
-                        </tr>
-                    </table>
-                    <template v-if="session.toggleServ">
-                        <table class="leftElemTable" v-for="(elem, subIndex) in session.protoInform.serv" v-bind:key="subIndex">
+
+
+
+                    <template v-if="session.toggleAll">
+                        <template v-if="session.toggleServ">
+                            <table class="leftTable"  v-on:click="toggleStage(index,3)">
+                                <tr>
+                                    <td class="btnTd2">
+                                        <div class="expandElem">
+                                            <img class="expandImg" src="./LeftSession/LeftImgs/toggleOff.png">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="nameElem2">Services</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </template>
+                        <template v-else>
+                            <table class="leftTable" v-on:click="toggleStage(index,3)">
+                                <tr>
+                                    <td class="btnTd2">
+                                        <div class="expandElem">
+                                            <img class="expandImg" src="./LeftSession/LeftImgs/toggleOn.png">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="nameElem2">Services</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </template>
+                    </template>
+
+
+
+                    <template v-if="session.toggleServ && session.toggleAll">
+                        <table class="leftTable" v-for="(elem, subIndex) in session.protoInform.serv" v-bind:key="subIndex">
                             <tr>
-                                <td class="btnTd">
+                                <td class="btnTd3">
                                     <div class="expandElem">
                                         <img class="expandImg" src="./LeftSession/LeftImgs/elemServ.png">
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="nameElem">{{elem.name}}</p>
+                                    <p class="nameElem3">{{elem.name}}</p>
                                 </td>
                             </tr>
                         </table>
                     </template>
-                    <table class="leftToggleTable" v-if="session.toggleAll">
-                        <tr>
-                            <td class="btnTd">
-                                <div class="expandElem">
-                                    <img class="expandImg" v-on:click="toggleStage(index,4)"
-                                    v-if="session.toggleProcesses" src="./LeftSession/LeftImgs/toggleOff.png">
-                                    <img class="expandImg" v-on:click="toggleStage(index,4)"
-                                    v-else src="./LeftSession/LeftImgs/toggleOn.png">
-                                </div>
-                            </td>
-                            <td>
-                                <p class="nameElem">Processes</p>
-                            </td>
-                        </tr>
-                    </table>
                 </div>
             </div>
         </tr>
@@ -164,7 +218,7 @@ export default {
             electron.ipcRenderer.on('reload_session', (evt, payload) => { 
                 this.setData(payload)
                 for(let sess = 0; sess<this.nowSessions.length; sess++){
-                    let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ","toggleProcesses"]
+                    let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ"]
                     for(let sessCnt = 0; sessCnt<stageKey.length; sessCnt++){
                         this.nowSessions[sess][stageKey[sessCnt]] = false
                     }
@@ -175,8 +229,13 @@ export default {
             electron.ipcRenderer.send('reload_session')
         },
         toggleStage: function(sessionIdx, stagePosition){
-            let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ","toggleProcesses"]
+            let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ"]
             this.nowSessions[sessionIdx][stageKey[stagePosition]] = !(this.nowSessions[sessionIdx][stageKey[stagePosition]])
+            if (stagePosition==0 && !this.nowSessions[sessionIdx][stageKey[0]]){
+                this.nowSessions[sessionIdx][stageKey[1]] = false
+                this.nowSessions[sessionIdx][stageKey[2]] = false
+                this.nowSessions[sessionIdx][stageKey[3]] = false
+            }
         }
     },
     created(){
@@ -212,9 +271,8 @@ export default {
 .expandElem{
     display: inline-block;
     width: 24px;
-    height: 24px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 3px 0 0 0;
 }
 .enterElem{
     display: inline-block;
@@ -223,33 +281,70 @@ export default {
     background-color: red;
 }
 .btnTd{
-    width: 18px;
-    text-align: center;
+    width: 20px;
+    text-align: right;
+}
+.btnTd2{
+    width: 36px;
+    text-align: right;
+}
+.btnTd3{
+    width: 52px;
+    text-align: right;
 }
 .nameElem{
     display: inline-block;
-    margin: 0 2px 6px 2px;
-    font-weight: 400;
+    margin: 0 2px 0px 6px;
+    font-weight: 600;
     font-size: 16px;
+
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.nameElem2{
+    display: inline-block;
+    margin: 0 2px 0px 6px;
+    font-weight: 400;
+    font-size: 15px;
+
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.nameElem3{
+    display: inline-block;
+    margin: 0 2px 0px 6px;
+    font-weight: 100;
+    font-size: 13px;
+
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .leftTable{
     width: 100%;
     margin: 0;
-    padding: 0 0 0 4px;
+    padding: 0 0 0 0px;
 }
-.leftToggleTable{
-    width: 100%;
-    margin: 0;
-    padding: 0 0 0 12px;
-}
-.leftElemTable{
-    width: 100%;
-    margin: 0;
-    padding: 0 0 0 20px;
+.leftTable:hover{
+    background-color: rgba(0,0,0,0.1);
+    cursor: pointer;
 }
 .expandImg{
-    padding:0;
+    padding: 0 0 0 4px;
     margin: 0;
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 
