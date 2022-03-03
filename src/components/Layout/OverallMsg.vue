@@ -6,8 +6,11 @@
                     <td v-if="flag==0">
                         <img class="topImg" src="./OverallMsg/okay.png">
                     </td>
-                    <td v-else>
+                    <td v-if="flag==1">
                         <img class="topImg" src="./OverallMsg/error.png">
+                    </td>
+                    <td v-if="flag==2">
+                        <img class="topImg" src="./OverallMsg/warn.png">
                     </td>
                 </tr>
                 <tr class="overallTableTr">
@@ -20,12 +23,23 @@
                         <p class="overallMsg">{{msg}}</p>
                     </td>
                 </tr>
-                <tr class="overallTableTr">
+                <tr class="overallTableTr" v-if="flag!=2">
                     <td>
                         <button class="overallBtn" type="button" v-on:click="delDiv()">
                                 Confirm
                         </button>
                     </td>
+                </tr>
+                <tr class="overallTableTr" v-else>
+                    <td>
+                        <button class="overallDelBtn" type="button" v-on:click="delNowKey()">
+                                Confirm
+                        </button>
+                        <button class="overallBtn" type="button" v-on:click="delDiv()">
+                                Leave
+                        </button>
+                    </td>
+
                 </tr>
             </table>
 
@@ -41,7 +55,8 @@ var overallMsg = {
     msg : "",
     flag : 0, // 0: normal, 1: error
     nowBtn : false,
-    nowOverall: false
+    nowOverall: false,
+    nowDelKey: -1
 }
 export default {
     name: 'LayoutTable',
@@ -52,10 +67,15 @@ export default {
         setMainMsg : function(mainMsg){ this["mainMsg"] = mainMsg },
         setMsg : function(msg){ this["msg"] = msg },
         setFlag : function(flag){ this["flag"] = flag },
+        setDelKey : function(nowKey){ this["nowDelKey"] = nowKey },
         makeBtn: function(){ this["nowBtn"] = true },
         delBtn: function(){ this["nowBtn"] = false },
         makeDiv: function(){ this["nowOverall"] = true },
-        delDiv: function(){ this["nowOverall"] = false }
+        delDiv: function(){ this["nowOverall"] = false },
+        delNowKey: function(){
+            this["nowOverall"] = false
+            this.$parent.delNowKeyFromMsg(this["nowDelKey"])
+        }
     }
   }
 </script>
@@ -132,6 +152,27 @@ export default {
 .overallBtn:focus{
     outline:none;
 }
+
+.overallDelBtn{
+    border-radius:2px;
+    border: 0px solid;
+    background-color: rgb(255, 71, 71);
+    color: white;
+    padding: 12px;
+    transition: 0.2s;
+    display: inline-block;
+    margin: 2px;
+    font-weight: 100;
+    font-size: 12px;
+    font-family: Avenir;
+}
+.overallDelBtn:hover{
+    background-color: rgb(252, 131, 131);
+}
+.overallDelBtn:focus{
+    outline:none;
+}
+
 .overallTableTr{
     width:100%;
 }

@@ -45,6 +45,17 @@ export default {
         this.$refs.overallMsgRef.makeBtn()
         this.$refs.overallMsgRef.makeDiv()
         this.$refs.leftSessionRef.reloadSession()
+      },
+      overallDivDelOn: function(mainMsg, msgToOverall, toFlag, nowDelKey){
+        this.$refs.overallMsgRef.setMainMsg(mainMsg)
+        this.$refs.overallMsgRef.setMsg(msgToOverall)
+        this.$refs.overallMsgRef.setFlag(toFlag)
+        this.$refs.overallMsgRef.setDelKey(nowDelKey)
+        this.$refs.overallMsgRef.makeBtn()
+        this.$refs.overallMsgRef.makeDiv()
+      },
+      delNowKeyFromMsg: function(nowDelKey){
+        this.$refs.leftSessionRef.delNowKeyFromMsg(nowDelKey)
       }
   
     }
@@ -69,6 +80,7 @@ export default {
   overflow-y: auto;
   width:100%;
   height:100%;
+  overflow-x: hidden;
 }
 .tdDiv:hover::-webkit-scrollbar-thumb {
   background-color: white;

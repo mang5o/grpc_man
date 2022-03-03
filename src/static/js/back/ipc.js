@@ -30,3 +30,6 @@ ipcMain.on('reload_session', (evt, payload) => {
     let reloadSessionPayload = fsFunc.loadSession()
     evt.reply('reload_session', reloadSessionPayload)
 })  
+ipcMain.on('save_session_left', (evt, payload) => {
+    let reloadSessionPayload = fsFunc.saveConfig(payload)
+})  

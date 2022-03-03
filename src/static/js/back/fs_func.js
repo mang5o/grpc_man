@@ -64,6 +64,10 @@ const fsFunc = {
             JSON.stringify(nowSessionObject,null,4))
         
         return nowSessionObject
+    },
+    saveConfig: function(configElem){
+        fs.writeFileSync(this.dirPath + this.sessionName,
+            JSON.stringify(configElem,null,4))
     }
     
 }

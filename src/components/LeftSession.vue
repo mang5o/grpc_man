@@ -1,37 +1,54 @@
 <template>
     <table class="overallLeftTable">
         <tr class="titleTr">
-            <td>
-                <p>Explorer</p>
+            <td class="explorerTd">
+                <p class="explorerP">EXPLORER</p>
             </td>
         </tr>
-        <tr>
+
+
+
+
+
+
+
+        <tr v-if="!(nowModifMode)">
             <div class="tdDiv">
                 <div v-for="(session, index) in nowSessions" v-bind:key="index" class="sessionElem">
                     <template v-if="session.toggleAll">
-                        <table class="leftTable" v-on:click="toggleStage(index,0)">
+                        <table class="leftTable">
                             <tr>
-                                <td class="btnTd">
+                                <td class="btnTd"  v-on:click="toggleStage(index,0)">
                                     <div class="expandElem">
                                         <img class="expandImg" src="./LeftSession/LeftImgs/toggleOff.png">
                                     </div>
                                 </td>
-                                <td>
+                                <td  v-on:click="toggleStage(index,0)">
                                     <p class="nameElem">{{session.sessionName}}</p>
+                                </td>
+                                <td class="btnTd">
+                                    <div class="expandElem">
+                                        <img class="expandImg2" src="./LeftSession/LeftImgs/startProto.png">
+                                    </div>
                                 </td>
                             </tr>
                         </table>
                     </template>
                     <template v-else>
-                        <table class="leftTable" v-on:click="toggleStage(index,0)">
+                        <table class="leftTable">
                             <tr>
-                                <td class="btnTd">
+                                <td class="btnTd"  v-on:click="toggleStage(index,0)">
                                     <div class="expandElem">
                                         <img class="expandImg" src="./LeftSession/LeftImgs/toggleOn.png">
                                     </div>
                                 </td>
-                                <td>
+                                <td  v-on:click="toggleStage(index,0)">
                                     <p class="nameElem">{{session.sessionName}}</p>
+                                </td>
+                                <td class="btnTd">
+                                    <div class="expandElem">
+                                        <img class="expandImg2" src="./LeftSession/LeftImgs/startProto.png">
+                                    </div>
                                 </td>
                             </tr>
                         </table>
@@ -182,12 +199,58 @@
                 </div>
             </div>
         </tr>
+
+        <tr v-if="nowModifMode">
+        <draggable
+            :list="nowSessions"
+            item-key="nowKey"
+            class="list-group"
+            ghost-class="ghost"
+            @start="dragging = true"
+            @end="dragging = false">
+
+            <template #item="{ element }">
+            <div class="list-group-item">
+                <div class="sessionElem">
+                    <table class="leftTable">
+                            <tr>
+                                <td class="btnTd">
+                                    <div class="expandElem">
+                                        <img class="expandImg" src="./LeftSession/LeftImgs/leftMov.png">
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="longInput" v-model="element.sessionName">
+                                </td>
+                                <td class="btnTd" v-on:click="delAllDiv(element.sessionName, element.nowKey)">
+                                    <div class="expandElem">
+                                        <img class="expandImg2" src="./LeftSession/LeftImgs/rightDel.png">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </template>
+        </draggable>
+        </tr>
+
+
+
+
+
+
+
+
+
+
+        
         <tr class="optionTr">
-            <td>
+            <td class="optionTd">
                 <label class="form-switch">
-                <input type="checkbox">
+                <input type="checkbox" v-model="nowModifMode" v-on:click="toggleOption()">
                 <i></i>
-                Select Me
+                Modification mode
                 </label>
             </td>
         </tr>
@@ -199,14 +262,17 @@
 var sessionData = {
     nowKey:-1,
     nowSessions : [],
-    nowToggleDel: false,
-    nowToggleMov: false,
+    nowModifMode: false
 }
 const electron = window.require("electron")
+import draggable from "vuedraggable";
 export default {
     name: 'LeftSession',
     data: function() {
       return sessionData
+    },
+    components: {
+      draggable
     },
     methods:{
         setData: function(sessionDataParam){
@@ -215,17 +281,6 @@ export default {
             }
         },
         reloadSession: function(){
-            electron.ipcRenderer.on('reload_session', (evt, payload) => { 
-                this.setData(payload)
-                for(let sess = 0; sess<this.nowSessions.length; sess++){
-                    let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ"]
-                    for(let sessCnt = 0; sessCnt<stageKey.length; sessCnt++){
-                        this.nowSessions[sess][stageKey[sessCnt]] = false
-                    }
-                }
-            }) 
-            console.log("reload_session : ")
-            console.log(sessionData)
             electron.ipcRenderer.send('reload_session')
         },
         toggleStage: function(sessionIdx, stagePosition){
@@ -236,9 +291,49 @@ export default {
                 this.nowSessions[sessionIdx][stageKey[2]] = false
                 this.nowSessions[sessionIdx][stageKey[3]] = false
             }
+        },
+        toggleOption : function(){
+            if(this.nowModifMode){
+                this.saveNowSession()
+            }
+            for(let sess = 0; sess<this.nowSessions.length; sess++){
+                    let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ"]
+                    for(let sessCnt = 0; sessCnt<stageKey.length; sessCnt++){
+                        this.nowSessions[sess][stageKey[sessCnt]] = false
+                    }
+                }
+            this.nowModifMode = !(this.nowModifMode)
+
+        },
+        saveNowSession : function(){
+            let dataToSave = sessionData
+            console.log(dataToSave)
+            electron.ipcRenderer.send('save_session_left',dataToSave)
+            sessionData.nowModifMode = false
+        },
+        delAllDiv: function(sessionName, nowKey){
+
+            this.$parent.overallDivDelOn("Warning", 
+            "Are you sure that you want to delete '"+sessionName+"'?",2,nowKey)
+        },
+        delNowKeyFromMsg: function(nowDelKey){
+            let realItem = this.nowSessions.find(function(item) {return item.nowKey === nowDelKey})
+            let realIdx = this.nowSessions.indexOf(realItem)
+            if(realIdx != -1){this.nowSessions.splice(realIdx,1)}
+            this.saveNowSession()
         }
     },
     created(){
+        electron.ipcRenderer.on('reload_session', (evt, payload) => { 
+            this.setData(payload)
+            for(let sess = 0; sess<this.nowSessions.length; sess++){
+                let stageKey = ["toggleAll","toggleProto","toggleMsg","toggleServ"]
+                for(let sessCnt = 0; sessCnt<stageKey.length; sessCnt++){
+                    this.nowSessions[sess][stageKey[sessCnt]] = false
+                }
+            }
+            this.nowModifMode = false
+        }) 
         this.reloadSession()
     }
   }
@@ -258,7 +353,7 @@ export default {
     font-family: Avenir;
 }
 .optionTr{
-    height: 64px;
+    height: 48px;
 }
 .titleTr{
     height: 32px;
@@ -346,13 +441,35 @@ export default {
     -webkit-user-select: none;
     user-select: none;
 }
-
+.expandImg2{
+    padding: 0 8px 0 4px;
+    margin: 0;
+    -ms-user-select: none; 
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.explorerTd{
+    text-align: center;
+    background-color: rgba(10, 25, 49,0.8);
+    border-radius: 16px;
+}
+.explorerP{
+    font-weight: 400;
+    font-size: 20px;
+    font-family: Avenir;
+    padding: 0px;
+    margin: 4px;
+    color: white;
+}
 
 
 .tdDiv{
   overflow-y: auto;
   width:100%;
   height:100%;
+  overflow-x : hidden;
 }
 .tdDiv:hover::-webkit-scrollbar-thumb {
   background-color: white;
@@ -375,8 +492,33 @@ export default {
 }
 
 
+.optionTd{
+    text-align: left;
+    padding: 6px 2px 6px 8px;
+    font-weight: 600;
+    font-size: 16px;
+    font-family: Avenir;
+    background-color: rgba(10, 25, 49, 0.8);
+    border-radius: 6px;
+    color: white;
+}
 
 
+
+
+.longInput{
+    border-radius: 16px;
+    border: 1px solid rgb(197, 218, 250);
+    font-family: Avenir;
+    font-weight: 600;
+    font-size: 12px;
+    width: 84%;
+    padding: 10px;
+    margin: 2px;
+}
+.longInput:focus{
+    outline:none;
+}
 
 
 
@@ -386,6 +528,13 @@ export default {
   display: inline-block;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  text-align: left;
+  margin: 2px;
+  -ms-user-select: none; 
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .form-switch i {
   position: relative;
@@ -427,7 +576,7 @@ export default {
 }
 .form-switch:active input:checked + i::after { transform: translate3d(16px, 2px, 0); }
 .form-switch input { display: none; }
-.form-switch input:checked + i { background-color: #4BD763; }
+.form-switch input:checked + i { background-color: rgb(71, 143, 255); }
 .form-switch input:checked + i::before { transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0); }
 .form-switch input:checked + i::after { transform: translate3d(22px, 2px, 0); }
 </style>
