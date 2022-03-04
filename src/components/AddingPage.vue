@@ -54,14 +54,25 @@
                     <td class="categoryTd"><p class="categoryLabel">type</p></td>
                 </tr>
                 <template v-for="(i, index) in protoInform.msg" v-bind:key="index">
-                    <tr class="categoryTr"> <td colspan="4" class="allBigTd"><div class="allElemDiv"><p class="allBigElements">{{i.name}}</p></div></td> </tr>
+                    <tr class="categoryTr"> <td colspan="4" class="allBigTd"><div class="allElemDiv">
+                        <p class="allBigElements">{{i.name}}</p>
+                        <div class="prefixBigElements" v-if="i.enum"><p>ENUM</p></div>
+                        <div class="prefixBigElements" v-if="i.oneof"><p>ONEOF</p></div>
+                    </div></td> </tr>
                     <tr class="allElemTr" v-for="(j, subIndex) in i.structs" v-bind:key="subIndex">
                         <td v-if="subIndex%2==1" class="oddTd" ></td>
                         <td v-if="subIndex%2==1" class="oddTd" colspan="2"><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
-                        <td v-if="subIndex%2==1" class="oddTd"><div class="allElemDiv"><p class="allElements">{{j.type}}</p></div></td>
+                        <td v-if="subIndex%2==1" class="oddTd"><div class="allElemDiv">
+                        <div class="prefixSmallElements" v-if="j.repeat"><p>REPEATED</p></div>
+                        <p class="allElements">{{j.type}}</p>
+                        </div></td>
+
                         <td v-if="subIndex%2==0" class="evenTd" ></td>
                         <td v-if="subIndex%2==0" class="evenTd" colspan="2"><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
-                        <td v-if="subIndex%2==0" class="evenTd"><div class="allElemDiv"><p class="allElements">{{j.type}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd"><div class="allElemDiv">
+                        <div class="prefixSmallElements" v-if="j.repeat"><p>REPEATED</p></div>
+                        <p class="allElements">{{j.type}}</p>
+                        </div></td>
                     </tr>
                 </template>
                 <tr class="blanks"><td></td><td></td><td></td><td></td></tr>
@@ -76,12 +87,25 @@
                     <tr class="allElemTr" v-for="(j, subIndex) in i.rpcs" v-bind:key="subIndex">
                         <td v-if="subIndex%2==1" class="oddTd" ></td>
                         <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
-                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv"><p class="allElements">{{j.requestType}}</p></div></td>
-                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv"><p class="allElements">{{j.responseType}}</p></div></td>
+                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv">
+                        <div class="prefixSmallElements" v-if="j.requestStream"><p>STREAM</p></div>
+                        <p class="allElements">{{j.requestType}}</p>
+                        </div></td>
+                        <td v-if="subIndex%2==1" class="oddTd" ><div class="allElemDiv">
+                        <div class="prefixSmallElements" v-if="j.responseStream"><p>STREAM</p></div>
+                        <p class="allElements">{{j.responseType}}</p>
+                        </div></td>
+
                         <td v-if="subIndex%2==0" class="evenTd" ></td>
                         <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv"><p class="allElements">{{j.name}}</p></div></td>
-                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv"><p class="allElements">{{j.requestType}}</p></div></td>
-                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv"><p class="allElements">{{j.responseType}}</p></div></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv">
+                        <div class="prefixSmallElements" v-if="j.requestStream"><p>STREAM</p></div>
+                        <p class="allElements">{{j.requestType}}</p>
+                        </div></td>
+                        <td v-if="subIndex%2==0" class="evenTd" ><div class="allElemDiv">
+                        <div class="prefixSmallElements" v-if="j.responseStream"><p>STREAM</p></div>
+                        <p class="allElements">{{j.responseType}}</p>
+                        </div></td>
                     </tr>
                 </template>
 
@@ -139,7 +163,6 @@ export default {
   },
   created(){
         electron.ipcRenderer.on('load_main_proto_diagram', (evt, payload) => {
-            console.log(payload)
             this.setData("nowFlag",2)
             this.setData("protoPath", payload.mainProto)
             this.setData("protos", payload.protos)
@@ -270,6 +293,36 @@ export default {
 }
 .allBigTd{
     background-color: rgb(133, 193, 255);
+}
+.prefixBigElements{
+    display:inline-block;
+    background-color:rgba(10, 25, 49,0.8);
+    padding: 2px;
+    margin: 0px 4px;
+    border-radius: 6px;
+}
+.prefixBigElements p{
+    font-weight: 100;
+    font-size: 14px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 0;
+    color: white;
+}
+.prefixSmallElements{
+    display:inline-block;
+    background-color:rgba(10, 25, 49,0.8);
+    padding: 2px;
+    margin: 0px 4px 0px 0px;
+    border-radius: 6px;
+}
+.prefixSmallElements p{
+    font-weight: 100;
+    font-size: 12px;
+    font-family: Avenir;
+    display: inline-block;
+    margin: 0;
+    color: white;
 }
 .oddTd{background-color: rgb(232, 242, 255);}
 .evenTd{background-color: rgb(242, 247, 252);}
