@@ -242,7 +242,11 @@
 
 
 
-
+        <tr class="addingTr">
+            <td class="addingDiv">
+                Adding a new .proto file
+            </td>
+        </tr>
 
         
         <tr class="optionTr">
@@ -354,6 +358,19 @@ export default {
 }
 .optionTr{
     height: 48px;
+}
+.addingTr{
+    height: 32px;
+}
+.addingDiv{
+    width: 100%;
+    font-weight: 600;
+    font-size: 16px;
+    font-family: Avenir;
+    text-align: center;
+    border: dotted;
+    border-radius: 12px;
+    cursor: pointer;
 }
 .titleTr{
     height: 32px;
