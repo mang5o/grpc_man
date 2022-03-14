@@ -13,12 +13,12 @@ npm run electron:build # Project build (Error)
 ### Preview
 | Loading .proto files | Modification sessions |
 |----------------------|-----------------------|
-|![gif1](https://raw.githubusercontent.com/mang5o/grpc_man/readme_static/readme_gif_1.gif)|![gif2](https://raw.githubusercontent.com/mang5o/grpc_man/readme_static/readme_gif_2.gif)|
+|![gif1](https://raw.githubusercontent.com/mang5o/grpc_man/main/readme_static/readme_gif_1.gif)|![gif2](https://raw.githubusercontent.com/mang5o/grpc_man/main/readme_static/readme_gif_2.gif)|
 
 
 | .proto files | View |
 |----------------------|-----------------------|
-|[png1](https://raw.githubusercontent.com/mang5o/grpc_man/readme_static/readme_preview_1.png)|[png2](https://raw.githubusercontent.com/mang5o/grpc_man/readme_static/readme_preview_2.png)|
+|[png1](https://raw.githubusercontent.com/mang5o/grpc_man/main/readme_static/readme_preview_1.png)|[png2](https://raw.githubusercontent.com/mang5o/grpc_man/main/readme_static/readme_preview_2.png)|
 
 
 ### TODO
