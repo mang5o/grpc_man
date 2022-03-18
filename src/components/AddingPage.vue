@@ -111,11 +111,6 @@
 
 
             </template>
-            <template>
-                <tr>
-                <td colspan="4"><div class="addingDiv">Add a new .proto file</div></td>
-                </tr>
-            </template>
             <tr><td colspan="4" class="makeWidth"></td></tr>
 
 
