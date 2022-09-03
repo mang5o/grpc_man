@@ -1,4 +1,7 @@
 ﻿Manage all gRPC processes efficiently through gRPC client simulator.
+ 
+> :warning: **This project has been discontinued.**
+> The same functionality has already begun to be supported by Postman.
 
 # What is this project?
 When many people test gRPC services, they bother to create their own client sources. gRPC process always has `.proto` files, which allows us to know the form of requests and responses efficiently. This program automatically creates request forms with `.proto` files and helps you communicate with it. Ultimately, I want it to be a management program like Postman.
